@@ -1,4 +1,6 @@
 #pragma once
+#include <map>
+
 #include <SFML/Graphics.hpp>
 #include <SfML/System.hpp>
 
@@ -6,17 +8,25 @@
 
 class Game
 {
+private:
+	void initWindow();
+	void initPlayer();
+	void initTextures();
+
+	sf::RenderWindow* window;
+
+	Player* player;
+
+	std::map<std::string, sf::Texture*> textures;
+
 public:
 	Game();
-	~Game();
+	virtual ~Game();
 
 	void run();
 
+	void updatePollEvents();
+	void updateInput();
 	void update();
 	void render();
-
-private:
-	void initWindow();
-
-	sf::RenderWindow* window;
 };
