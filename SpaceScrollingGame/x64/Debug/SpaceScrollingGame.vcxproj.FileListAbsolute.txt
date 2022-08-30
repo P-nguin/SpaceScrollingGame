@@ -1,0 +1,2 @@
+C:\Users\Anny\source\repos\SpaceScrollingGame\SpaceScrollingGame\x64\Debug\SpaceScrollingGame.exe
+C:\Users\Anny\Documents\GitHub\SpaceScrollingGame\SpaceScrollingGame\SpaceScrollingGame\x64\Debug\SpaceScrollingGame.exe
