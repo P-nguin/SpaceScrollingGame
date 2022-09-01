@@ -5,6 +5,8 @@
 #include <SfML/System.hpp>
 
 #include "Player.h"
+#include "Bullet.h"
+#include "Enemy.h"
 
 class Game
 {
@@ -17,7 +19,14 @@ private:
 
 	Player* player;
 
+	sf::Clock mainClock;
+
 	std::map<std::string, sf::Texture*> textures;
+	std::vector<Bullet*> bullets;
+	std::vector<Enemy*> enemies;
+
+	float spawnTimer;
+	float spawnTimerMax;
 
 public:
 	Game();
@@ -25,8 +34,11 @@ public:
 
 	void run();
 
+	void initVariables();
 	void updatePollEvents();
-	void updateInput();
+	void updateEnemy(float dt);
+	void updateInput(float dt);
+	void updateBullets(float dt);
 	void update();
 	void render();
 };

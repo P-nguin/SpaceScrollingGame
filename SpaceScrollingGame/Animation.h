@@ -10,16 +10,21 @@ private:
 	sf::Texture* spriteSheet;
 	float switchTime;
 	float elapsedTime;
-	float height, width;
+	int height, width;
 	int row;
 	int amtPictures;
 	int curPic = 0;
 
 public:
-	Animation(sf::Texture* texture, int row, int amtPictures, float height, float width, float switchTime);
+	Animation();
 	virtual ~Animation();
 
+	void init(sf::Texture* texture, int row, 
+		int amtPictures, int height, int width, 
+		float switchTime);
+
+	sf::IntRect getFrame();
+
 	void update(float dt);
-	void render();
 };
 

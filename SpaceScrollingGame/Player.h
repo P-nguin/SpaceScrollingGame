@@ -12,6 +12,10 @@ private:
 
 	float movementSpeed;
 
+	float attackCoolDown;
+	float attackCoolDownMax;
+
+	void initVariables();
 	void initTexture();
 	void initSprite();
 
@@ -19,9 +23,13 @@ public:
 	Player();
 	virtual ~Player();
 
-	void move(const float dirX, const float dirY);
+	const sf::Vector2f& getPos() const;
 
-	void update();
+	void move(const float dirX, const float dirY, float dt);
+	const bool canAttack();
+
+	void updateAttack(float dt);
+	void update(float dt);
 	void render(sf::RenderTarget& target);
 };
 

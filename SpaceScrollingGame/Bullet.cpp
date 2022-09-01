@@ -1,28 +1,33 @@
 #include "Bullet.h"
 
-Bullet::Bullet()
+Bullet::Bullet(sf::Texture* texture, float posX, float posY, float dirX, float dirY, float movementSpeed)
 {
-
-}
-
-Bullet::Bullet(sf::Texture& texture, float dirX, float dirY, float movementSpeed)
-{
-	this->sprite.setTexture(texture);
 	this->dir.x = dirX;
 	this->dir.y = dirY;
 	this->movementSpeed = movementSpeed;
+	this->sprite.setPosition(posX, posY);
+	this->sprite.setTexture(*texture);
+
+	this->animation.init(texture, 0, 4, 32, 32, 0.125f);
 }
 
 Bullet::~Bullet()
 {
 }
 
-void Bullet::update()
+const sf::FloatRect Bullet::getBounds() const
 {
-	this->sprite.move(this->movementSpeed * this->dir);
+	return this->sprite.getGlobalBounds();
 }
 
-void Bullet::render(sf::RenderTarget* target)
+void Bullet::update(float dt)
 {
-	target->draw(this->sprite);
+	animation.update(dt);
+	this->sprite.move(this->movementSpeed * this->dir * dt);
+}
+
+void Bullet::render(sf::RenderTarget& target)
+{
+	this->sprite.setTextureRect(animation.getFrame());
+	target.draw(this->sprite);
 }
