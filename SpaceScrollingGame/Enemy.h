@@ -8,6 +8,7 @@ class Enemy
 {
 private:
 	sf::Sprite sprite;
+	sf::FloatRect hitbox;
 	Animation animation;
 
 	int maxHp;
@@ -15,6 +16,8 @@ private:
 	int damage;
 	int points;
 	float speed;
+
+	void initHitBox();
 
 public:
 	Enemy();
@@ -26,7 +29,8 @@ public:
 	const int getDamage();
 	const int getHealth();
 
-	void setTexture(sf::Texture* texture);
+	bool takeDamage(int dmg);
+	sf::Vector2f getPosition();
 
 	void update(float dt);
 	void render(sf::RenderTarget& target);

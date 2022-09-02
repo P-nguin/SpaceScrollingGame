@@ -1,10 +1,19 @@
 #include "Enemy.h"
 
+void Enemy::initHitBox()
+{
+	hitbox.top = this->sprite.getPosition().y - this->sprite.getTexture()->getSize().y / 2.f;
+	hitbox.left = this->sprite.getPosition().x - this->sprite.getTexture()->getSize().x / 2.f;
+	hitbox.width = this->sprite.getTexture()->getSize().x;
+	hitbox.height = this->sprite.getTexture()->getSize().y;
+}
+
 Enemy::Enemy()
 {
 	maxHp = 3; health = maxHp;
 	damage = 1; points = 10;
 	speed = 100.f;
+	sprite.setOrigin(this->sprite.getTexture()->getSize().x / 2.f, this->sprite.getTexture()->getSize().y / 2.f);
 }
 
 Enemy::Enemy(sf::Texture* texture, sf::Vector2f pos)
@@ -16,7 +25,7 @@ Enemy::Enemy(sf::Texture* texture, sf::Vector2f pos)
 	health = maxHp;
 	damage = 1;
 	points = 10;
-	speed = 100.f;
+	speed = 60.f;
 }
 
 Enemy::~Enemy()
@@ -43,9 +52,16 @@ const int Enemy::getHealth()
 	return this->health;
 }
 
-void Enemy::setTexture(sf::Texture* texture)
+bool Enemy::takeDamage(int dmg)
 {
-	this->sprite.setTexture(*texture);
+	this->health -= dmg;
+	if (health <= 0) return true;
+	return false;
+}
+
+sf::Vector2f Enemy::getPosition()
+{
+	return this->sprite.getPosition();
 }
 
 void Enemy::update(float dt)

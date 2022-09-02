@@ -3,8 +3,9 @@
 void Player::initVariables()
 {
 	this->movementSpeed = 150.f;
-	this->attackCoolDownMax = 0.5f;
+	this->attackCoolDownMax = 0.25f;
 	this->attackCoolDown = this->attackCoolDownMax;
+	this->damage = 1;
 }
 
 void Player::initTexture()
@@ -16,6 +17,7 @@ void Player::initTexture()
 void Player::initSprite()
 {
 	this->sprite.setTexture(this->texture);
+	this->sprite.setOrigin(this->sprite.getTexture()->getSize().x / 2.f, this->sprite.getTexture()->getSize().x / 2.f);
 }
 
 Player::Player()
@@ -49,6 +51,21 @@ const bool Player::canAttack()
 	}
 		
 	return false;
+}
+
+const int Player::getDamage()
+{
+	return this->damage;
+}
+
+const float Player::getWidth()
+{
+	return this->sprite.getTexture()->getSize().x;
+}
+
+void Player::setPosition(sf::Vector2f* pos)
+{
+	this->sprite.setPosition(*pos);
 }
 
 void Player::updateAttack(float dt)

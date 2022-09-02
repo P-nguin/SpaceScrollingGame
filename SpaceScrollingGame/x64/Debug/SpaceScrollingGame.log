@@ -1,2 +1,33 @@
-﻿  Player.cpp
+﻿  Game.cpp
+C:\Users\Anny\Documents\GitHub\SpaceScrollingGame\SpaceScrollingGame\SpaceScrollingGame\Game.cpp(48,76): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Anny\Documents\GitHub\SpaceScrollingGame\SpaceScrollingGame\SpaceScrollingGame\Game.cpp(161,100): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\Anny\Documents\GitHub\SpaceScrollingGame\SpaceScrollingGame\SpaceScrollingGame\Game.cpp(161,70): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+  Player.cpp
+C:\Users\Anny\Documents\GitHub\SpaceScrollingGame\SpaceScrollingGame\SpaceScrollingGame\Player.cpp(62,45): warning C4244: 'return': conversion from 'T' to 'const float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+  main.cpp
+  Generating Code...
   SpaceScrollingGame.vcxproj -> C:\Users\Anny\Documents\GitHub\SpaceScrollingGame\SpaceScrollingGame\SpaceScrollingGame\x64\Debug\SpaceScrollingGame.exe

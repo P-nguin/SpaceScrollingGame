@@ -11,6 +11,7 @@ private:
 	sf::Texture texture;
 
 	float movementSpeed;
+	int damage;
 
 	float attackCoolDown;
 	float attackCoolDownMax;
@@ -27,7 +28,10 @@ public:
 
 	void move(const float dirX, const float dirY, float dt);
 	const bool canAttack();
+	const int getDamage();
+	const float getWidth();
 
+	void setPosition(sf::Vector2f* pos);
 	void updateAttack(float dt);
 	void update(float dt);
 	void render(sf::RenderTarget& target);

@@ -47,8 +47,17 @@ void Game::updateEnemy(float dt)
 		spawnTimer -= spawnTimerMax;
 		enemies.push_back(new Enemy(this->textures["SCOUT"], sf::Vector2f(rand() % 600, -60)));
 	}
+
+	int cnt = 0;
 	for (auto* e : this->enemies) {
 		e->update(dt);
+
+		if (e->getPosition().y >= this->window->getSize().y + 40) {
+			delete this->enemies[cnt];
+			enemies.erase(enemies.begin() + cnt);
+			cnt--;
+		}
+		cnt++;
 	}
 }
 
@@ -73,21 +82,39 @@ void Game::updateInput(float dt)
 		this->player->move(0.f, 1.f, dt);
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->canAttack()) {
-		this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y,
+		this->bullets.push_back(new Bullet(this->textures["BULLET"], 
+			this->player->getPos().x + this->player->getWidth()/2 + this->textures["BULLET"]->getSize().x/2, this->player->getPos().y,
 			0.f, -1.f, 300.f));
 	}
 }
 
 void Game::updateBullets(float dt)
 {
-	unsigned cnt = 0;
+	int cnt = 0;
 	for (auto* b : this->bullets) {
 		b->update(dt);
 
 		if (b->getBounds().top + b->getBounds().height < 0.f) {
 			delete this->bullets[cnt];
 			this->bullets.erase(this->bullets.begin() + cnt);
+			if (cnt == 0) continue;
 			cnt--;
+			continue;
+		}
+
+		int cnt2 = 0;
+		for (auto* e : enemies) {
+			if (b->getBounds().intersects(e->getBounds())) {
+				delete this->bullets[cnt];
+				this->bullets.erase(this->bullets.begin() + cnt);
+				if (e->takeDamage(this->player->getDamage())) {
+					delete this->enemies[cnt2];
+					this->enemies.erase(this->enemies.begin() + cnt2);
+				}
+				cnt--;
+				break;
+			}
+			cnt2++;
 		}
 
 		cnt++;
@@ -131,6 +158,7 @@ void Game::initWindow()
 void Game::initPlayer()
 {
 	this->player = new Player();
+	this->player->setPosition(new sf::Vector2f(this->window->getSize().x/2, this->window->getSize().y / 2));
 }
 
 void Game::initTextures()
