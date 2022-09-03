@@ -16,6 +16,10 @@ private:
 	int damage;
 	int points;
 	float speed;
+	float hitBoxReduce;
+
+	float attackCoolDown;
+	float attackCoolDownMax;
 
 	void initHitBox();
 
@@ -29,6 +33,7 @@ public:
 	const int getDamage();
 	const int getHealth();
 
+	bool canAttack();
 	bool takeDamage(int dmg);
 	sf::Vector2f getPosition();
 

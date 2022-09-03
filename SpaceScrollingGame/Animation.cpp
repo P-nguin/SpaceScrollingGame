@@ -2,32 +2,29 @@
 
 Animation::Animation()
 {
-	switchTime = 0.f; elapsedTime = 0.f;
-	height = 0; width = 0;
-	row = 0; amtPictures = 0; curPic = 0;
-	spriteSheet = NULL;
+	this->switchTime = 0.f; this->elapsedTime = 0.f;
+	this->amtPictures = 0; this->curPic = 0;
+	this->spriteSheet = NULL; this->width = 0;
 }
 
 Animation::~Animation()
 {
 }
 
-void Animation::init(sf::Texture* texture, int row, int amtPictures, int height, int width,
+void Animation::init(sf::Texture* texture, int amtPictures,
 	float switchTime)
 {
 	this->spriteSheet = texture;
-	this->row = row;
 	this->amtPictures = amtPictures;
-	this->height = height;
-	this->width = width;
 	this->switchTime = switchTime;
 	this->elapsedTime = 0.f;
+	this->width = this->spriteSheet->getSize().x / (float)amtPictures;
 	this->curPic = 0;
 }
 
 sf::IntRect Animation::getFrame()
 {
-	return sf::IntRect(curPic * width, row * height, width, height);
+	return sf::IntRect(curPic * width, 0, width, spriteSheet->getSize().y);
 }
 
 void Animation::update(float dt)

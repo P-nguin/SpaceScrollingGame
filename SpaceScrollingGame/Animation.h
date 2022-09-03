@@ -10,8 +10,7 @@ private:
 	sf::Texture* spriteSheet;
 	float switchTime;
 	float elapsedTime;
-	int height, width;
-	int row;
+	float width;
 	int amtPictures;
 	int curPic = 0;
 
@@ -19,8 +18,8 @@ public:
 	Animation();
 	virtual ~Animation();
 
-	void init(sf::Texture* texture, int row, 
-		int amtPictures, int height, int width, 
+	void init(sf::Texture* texture, 
+		int amtPictures, 
 		float switchTime);
 
 	sf::IntRect getFrame();

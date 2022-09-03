@@ -34,7 +34,7 @@ void Game::run()
 
 void Game::initVariables()
 {
-	spawnTimerMax = 1.0f;
+	spawnTimerMax = 3.0f;
 	spawnTimer = spawnTimerMax;
 }
 
@@ -57,6 +57,14 @@ void Game::updateEnemy(float dt)
 			enemies.erase(enemies.begin() + cnt);
 			cnt--;
 		}
+
+		if (enemies.empty()) return;
+		if (e->canAttack()) {
+			enemyBullets.push_back(new Bullet(this->textures["ENEMYBOLT"], 5,
+				e->getPosition().x, e->getPosition().y, 0, -1.f, -75.f));
+			enemyBullets[enemyBullets.size()-1]->setScale(1.5);
+		}
+
 		cnt++;
 	}
 }
@@ -82,8 +90,8 @@ void Game::updateInput(float dt)
 		this->player->move(0.f, 1.f, dt);
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->canAttack()) {
-		this->bullets.push_back(new Bullet(this->textures["BULLET"], 
-			this->player->getPos().x + this->player->getWidth()/2 + this->textures["BULLET"]->getSize().x/2, this->player->getPos().y,
+		this->bullets.push_back(new Bullet(this->textures["BULLET"], 4,
+			this->player->getPos().x, this->player->getPos().y,
 			0.f, -1.f, 300.f));
 	}
 }
@@ -121,6 +129,22 @@ void Game::updateBullets(float dt)
 	}
 }
 
+void Game::updateEnemyBullets(float dt)
+{
+	int cnt = 0;
+	for (auto* b : enemyBullets) {
+		b->update(dt);
+		
+		if (b->getPosition().y >= window->getSize().y + 50) {
+			delete this->enemyBullets[cnt];
+			this->enemyBullets.erase(this->enemyBullets.begin() + cnt);
+			cnt--;
+		}
+
+		cnt++;
+	}
+}
+
 void Game::update()
 {
 	float dt = mainClock.restart().asSeconds();
@@ -129,6 +153,7 @@ void Game::update()
 	this->player->update(dt);
 	this->updateEnemy(dt);
 	this->updateBullets(dt);
+	this->updateEnemyBullets(dt);
 }
 
 void Game::render()
@@ -136,13 +161,38 @@ void Game::render()
 	window->clear();
 
 	this->player->render(*this->window);
+	sf::RectangleShape tmpP(sf::Vector2f(player->getBounds().height, player->getBounds().width));
+	tmpP.setOrigin(tmpP.getSize().x / 2, tmpP.getSize().y / 2);
+	tmpP.setPosition(player->getPos());
+	tmpP.setOutlineThickness(-1.f);
+	tmpP.setOutlineColor(sf::Color(250, 150, 100));
+	tmpP.setFillColor(sf::Color::Transparent);
+	this->window->draw(tmpP);
 
 	for (auto* b : this->bullets) {
+		b->render(*this->window);
+		sf::RectangleShape tmp(sf::Vector2f(b->getBounds().height, b->getBounds().width));
+		tmp.setOrigin(tmp.getSize().x / 2, tmp.getSize().y / 2);
+		tmp.setPosition(b->getPosition());
+		tmp.setOutlineThickness(-1.f);
+		tmp.setOutlineColor(sf::Color(250, 150, 100));
+		tmp.setFillColor(sf::Color::Transparent);
+		this->window->draw(tmp);
+	}
+
+	for (auto* b : enemyBullets) {
 		b->render(*this->window);
 	}
 
 	for (auto* e : this->enemies) {
 		e->render(*this->window);
+		sf::RectangleShape tmp(sf::Vector2f(e->getBounds().height, e->getBounds().width));
+		tmp.setOrigin(tmp.getSize().x / 2, tmp.getSize().y / 2);
+		tmp.setPosition(e->getPosition());
+		tmp.setOutlineThickness(-1.f);
+		tmp.setOutlineColor(sf::Color(250, 150, 100));
+		tmp.setFillColor(sf::Color::Transparent);
+		this->window->draw(tmp);
 	}
 
 	window->display();
@@ -168,4 +218,7 @@ void Game::initTextures()
 
 	this->textures["SCOUT"] = new sf::Texture();
 	this->textures["SCOUT"]->loadFromFile("Textures/Nairan/Base/Scout.png");
+
+	this->textures["ENEMYBOLT"] = new sf::Texture();
+	this->textures["ENEMYBOLT"]->loadFromFile("Textures/Nairan/WeaponProjectiles/NairanBolt.png");
 }

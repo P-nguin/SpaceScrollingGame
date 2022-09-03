@@ -23,6 +23,7 @@ private:
 
 	std::map<std::string, sf::Texture*> textures;
 	std::vector<Bullet*> bullets;
+	std::vector<Bullet*> enemyBullets;
 	std::vector<Enemy*> enemies;
 
 	float spawnTimer;
@@ -39,6 +40,7 @@ public:
 	void updateEnemy(float dt);
 	void updateInput(float dt);
 	void updateBullets(float dt);
+	void updateEnemyBullets(float dt);
 	void update();
 	void render();
 };

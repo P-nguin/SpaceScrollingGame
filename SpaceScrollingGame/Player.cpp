@@ -3,9 +3,10 @@
 void Player::initVariables()
 {
 	this->movementSpeed = 150.f;
-	this->attackCoolDownMax = 0.25f;
+	this->attackCoolDownMax = 0.125f;
 	this->attackCoolDown = this->attackCoolDownMax;
 	this->damage = 1;
+	this->hitBoxReduce = 0.f;
 }
 
 void Player::initTexture()
@@ -20,11 +21,20 @@ void Player::initSprite()
 	this->sprite.setOrigin(this->sprite.getTexture()->getSize().x / 2.f, this->sprite.getTexture()->getSize().x / 2.f);
 }
 
+void Player::initHitBox()
+{
+	this->hitBox.width = this->sprite.getTexture()->getSize().x - this->hitBoxReduce;
+	this->hitBox.height = this->sprite.getTexture()->getSize().y - this->hitBoxReduce;
+	this->hitBox.top = this->sprite.getPosition().y - this->hitBox.height / 2.f;
+	this->hitBox.left = this->sprite.getPosition().x - this->hitBox.width / 2.f;
+}
+
 Player::Player()
 {
+	this->initVariables();
 	this->initTexture();
 	this->initSprite();
-	this->initVariables();
+	this->initHitBox();
 
 	this->sprite.scale(2.6f, 2.6f);
 }
@@ -38,6 +48,11 @@ const sf::Vector2f& Player::getPos() const
 	return this->sprite.getPosition();
 }
 
+sf::FloatRect Player::getBounds()
+{
+	return this->hitBox;
+}
+
 void Player::move(const float dirX, const float dirY, float dt)
 {
 	this->sprite.move(this->movementSpeed * dirX * dt, this->movementSpeed * dirY * dt);
@@ -46,7 +61,7 @@ void Player::move(const float dirX, const float dirY, float dt)
 const bool Player::canAttack()
 {
 	if (this->attackCoolDown >= this->attackCoolDownMax) {
-		this->attackCoolDown = attackCoolDownMax - attackCoolDown;
+		this->attackCoolDown -= attackCoolDown;
 		return true;
 	}
 		

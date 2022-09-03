@@ -2,30 +2,36 @@
 
 void Enemy::initHitBox()
 {
-	hitbox.top = this->sprite.getPosition().y - this->sprite.getTexture()->getSize().y / 2.f;
-	hitbox.left = this->sprite.getPosition().x - this->sprite.getTexture()->getSize().x / 2.f;
-	hitbox.width = this->sprite.getTexture()->getSize().x;
-	hitbox.height = this->sprite.getTexture()->getSize().y;
+	hitbox.width = this->sprite.getTexture()->getSize().x - hitBoxReduce;
+	hitbox.height = this->sprite.getTexture()->getSize().y - hitBoxReduce;
+	hitbox.top = this->sprite.getPosition().y - this->hitbox.height/2.f;
+	hitbox.left = this->sprite.getPosition().x - this->hitbox.width/2.f;
 }
 
 Enemy::Enemy()
 {
 	maxHp = 3; health = maxHp;
 	damage = 1; points = 10;
+	hitBoxReduce = 21;
 	speed = 100.f;
+	attackCoolDownMax = 4.0f; attackCoolDown = attackCoolDownMax;
 	sprite.setOrigin(this->sprite.getTexture()->getSize().x / 2.f, this->sprite.getTexture()->getSize().y / 2.f);
+	initHitBox();
 }
 
 Enemy::Enemy(sf::Texture* texture, sf::Vector2f pos)
 {
-	sprite.setTexture(*texture);
-	sprite.setPosition(pos);
-
 	maxHp = 3;
 	health = maxHp;
 	damage = 1;
 	points = 10;
-	speed = 60.f;
+	speed = 50.f;
+	hitBoxReduce = 40;
+	attackCoolDownMax = 4.f;  attackCoolDown = attackCoolDownMax;
+	sprite.setTexture(*texture);
+	sprite.setPosition(pos);
+	sprite.setOrigin(this->sprite.getTexture()->getSize().x / 2.f, this->sprite.getTexture()->getSize().y / 2.f);
+	initHitBox();
 }
 
 Enemy::~Enemy()
@@ -34,7 +40,7 @@ Enemy::~Enemy()
 
 const sf::FloatRect Enemy::getBounds() const
 {
-	return this->sprite.getGlobalBounds();
+	return this->hitbox;
 }
 
 const int Enemy::getPoints()
@@ -52,6 +58,16 @@ const int Enemy::getHealth()
 	return this->health;
 }
 
+bool Enemy::canAttack()
+{
+	if (this->attackCoolDown >= this->attackCoolDownMax) {
+		this->attackCoolDown -= attackCoolDown;
+		return true;
+	}
+
+	return false;
+}
+
 bool Enemy::takeDamage(int dmg)
 {
 	this->health -= dmg;
@@ -67,6 +83,10 @@ sf::Vector2f Enemy::getPosition()
 void Enemy::update(float dt)
 {
 	this->sprite.move(0.f, this->speed * dt);
+	this->hitbox.top += this->speed * dt;
+
+	if (attackCoolDown < attackCoolDownMax)
+		attackCoolDown += dt;
 }
 
 void Enemy::render(sf::RenderTarget& target)
