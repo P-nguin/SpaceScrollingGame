@@ -13,10 +13,11 @@ private:
 
 	float movementSpeed;
 	int damage;
+	int health, healthMax;
 
 	float attackCoolDown;
 	float attackCoolDownMax;
-	float hitBoxReduce;
+	float hitBoxReduceX, hitBoxReduceY;
 
 	void initVariables();
 	void initTexture();
@@ -35,6 +36,7 @@ public:
 	const int getDamage();
 	const float getWidth();
 
+	void takeDamage(int amt);
 	void setPosition(sf::Vector2f* pos);
 	void updateAttack(float dt);
 	void update(float dt);

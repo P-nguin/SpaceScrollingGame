@@ -1,5 +1,5 @@
 ﻿  Player.cpp
-C:\Users\Anny\Documents\GitHub\SpaceScrollingGame\SpaceScrollingGame\SpaceScrollingGame\Player.cpp(78,45): warning C4244: 'return': conversion from 'T' to 'const float', possible loss of data
+C:\Users\Anny\Documents\GitHub\SpaceScrollingGame\SpaceScrollingGame\SpaceScrollingGame\Player.cpp(79,45): warning C4244: 'return': conversion from 'T' to 'const float', possible loss of data
           with
           [
               T=unsigned int

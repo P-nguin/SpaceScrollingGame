@@ -59,6 +59,7 @@ void Game::updateEnemy(float dt)
 		}
 
 		if (enemies.empty()) return;
+
 		if (e->canAttack()) {
 			enemyBullets.push_back(new Bullet(this->textures["ENEMYBOLT"], 5,
 				e->getPosition().x, e->getPosition().y, 0, -1.f, -75.f));
@@ -139,6 +140,18 @@ void Game::updateEnemyBullets(float dt)
 			delete this->enemyBullets[cnt];
 			this->enemyBullets.erase(this->enemyBullets.begin() + cnt);
 			cnt--;
+			if (cnt == 0) continue;
+			cnt--;
+			continue;
+		}
+
+		if (b->getBounds().intersects(this->player->getBounds())) {
+			delete this->enemyBullets[cnt];
+			this->enemyBullets.erase(this->enemyBullets.begin() + cnt);
+			this->player->takeDamage(1);
+			if (cnt == 0) continue;
+			cnt--;
+			continue;
 		}
 
 		cnt++;
@@ -182,6 +195,14 @@ void Game::render()
 
 	for (auto* b : enemyBullets) {
 		b->render(*this->window);
+		b->render(*this->window);
+		sf::RectangleShape tmp(sf::Vector2f(b->getBounds().height, b->getBounds().width));
+		tmp.setOrigin(tmp.getSize().x / 2, tmp.getSize().y / 2);
+		tmp.setPosition(b->getPosition());
+		tmp.setOutlineThickness(-1.f);
+		tmp.setOutlineColor(sf::Color(250, 150, 100));
+		tmp.setFillColor(sf::Color::Transparent);
+		this->window->draw(tmp);
 	}
 
 	for (auto* e : this->enemies) {
